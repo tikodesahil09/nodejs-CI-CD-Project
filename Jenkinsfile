@@ -4,7 +4,7 @@ pipeline {
     environment {
         HOME = '/var/lib/jenkins'
         PM2_HOME = '/var/lib/jenkins/.pm2'
-        PATH = "/usr/bin:/usr/local/bin:${env.PATH}"
+        PATH = "/usr/local/bin:/usr/bin:/bin:${env.PATH}"
     }
 
     stages {
@@ -29,10 +29,12 @@ pipeline {
         stage('Deploy with PM2') {
             steps {
                 sh '''
-                    /usr/bin/pm2 delete nodeapp || true
-                    /usr/bin/pm2 start index.js --name nodeapp
-                    /usr/bin/pm2 save
-                    /usr/bin/pm2 list
+                    which pm2
+                    pm2 -v
+                    pm2 delete nodeapp || true
+                    pm2 start index.js --name nodeapp
+                    pm2 save
+                    pm2 list
                 '''
             }
         }
